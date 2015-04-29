@@ -3,12 +3,20 @@ Python 2.7'''
 
 import os
 
-
 corpus_dir =  os.path.join(os.path.dirname(__file__),'corpus')
 myfile = open(os.path.join(corpus_dir,'a.txt'), "r")
+dictionary = {}
 
 for word in  myfile.read().split():
-	if str.isalpha(word.strip()):
-		print word
+	word = word.strip().lower()
+	if str.isalpha(word):
 
-		
+		if not word in dictionary:
+			dictionary[word] = 1
+		else:
+			dictionary[word] += 1
+
+
+print dictionary
+
+
