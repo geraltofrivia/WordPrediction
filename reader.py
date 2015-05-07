@@ -2,27 +2,53 @@
 Python 2.7'''
 
 import os
+import sys
+import redis 	#install this by typing 'sudo pip install redis' in terminal
+
+r=redis.StrictRedis(host="localhost",port=6379,db=0) 	#setting up the database
 
 corpus_dir =  os.path.join(os.path.dirname(__file__),'corpus')
-myfile = open(os.path.join(corpus_dir,'a.txt'), "r").read().split()
+corpus_files = os.listdir(corpus_dir)
 dictionary = {}
 
-#Filter myfile to store only words
-for word in myfile:
-	if not str.isalpha(word):
-		myfile.remove(word)
+def read_file(file_name):
+	global dictionary
+	myfile = open(os.path.join(corpus_dir,file_name), "r").read().split()
+	print "*********************%s******************" % file_name
+	#Filter myfile to store only words
+	
+	for word in myfile[:]:
+		if not str.isalpha(word):
+			myfile.remove(word)
 
+	if len(myfile) < 2:
+		print "Error: File too short. Exiting."
+		return
 
-#Main thing
-for i in  range(1,len(myfile)):
-	word = myfile[i].strip().lower()
-	previousword = myfile[i-1].strip().lower()
+	for i in  range(2,len(myfile)):
+		word3 = myfile[i].strip().lower()
+		word2 = myfile[i-1].strip().lower()
+		word1 = myfile[i-2].strip().lower()
 
-	if not previousword in dictionary:
-		dictionary[previousword] = [word]
-	else:
-		dictionary[previousword].append(word)
+		if not word1 in dictionary:
+			dictionary_level2 = {word2:[word3]}
+			dictionary[word1] = dictionary_level2
+			continue
 
-print dictionary
+		else:
+			dictionary_level2 = dictionary[word1]
+			if not word2 in dictionary_level2:
+				dictionary_level2[word2] = [word3]
+				continue
 
+			else:
+				dictionary_level2[word2].append(word3)
+				continue
 
+	
+for file_name in corpus_files:
+	read_file(file_name)
+
+for key in dictionary:
+	print key, ':', dictionary[key], '\n'
+print len(dictionary)
