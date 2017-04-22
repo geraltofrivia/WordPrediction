@@ -4,4 +4,6 @@
 
 I'm kidding. This is a project for the course stochastic simulation. 
 Here we use basic markov chains to do some word prediction.
-If you ever come across this repo and find it useful. I'm glad
+If you ever come across this repo and find it useful. I'm glad. I'm also apologetic for the lack of any documentation whatsoever, so ¯\_(ツ)_/¯
+
+
